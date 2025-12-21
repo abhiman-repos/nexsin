@@ -271,10 +271,10 @@ export default function HomePage() {
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-12 sm:py-16 lg:py-20 bg-[#0F172A]">
+      <section id="services" className="py-12 sm:py-1 lg:py-20 bg-[#0F172A]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">
               Our Services
             </h2>
             <p className="text-lg sm:text-xl text-[#cbd5e1] max-w-2xl mx-auto">
@@ -282,7 +282,7 @@ export default function HomePage() {
               office needs
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-3">
             {services.map((service, index) => {
               return (
                 <Card

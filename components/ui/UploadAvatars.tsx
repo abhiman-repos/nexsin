@@ -100,9 +100,16 @@ export default function UploadAvatars({
                     <li className="py-3 hover:bg-gray-800 cursor-pointer">
                       Update
                     </li>
-                    <li className="py-3 hover:bg-gray-800 cursor-pointer">
+                    <li
+                      className="py-3 hover:bg-gray-800 cursor-pointer"
+                      onClick={() => {
+                        setOpen(false);
+                        router.push("/contactus");
+                      }}
+                    >
                       Contact Us
                     </li>
+
                     <li className="py-3 hover:bg-gray-800 cursor-pointer">
                       History
                     </li>

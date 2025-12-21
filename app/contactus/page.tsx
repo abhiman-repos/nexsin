@@ -1,7 +1,10 @@
 "use client";
 
-import ContactUs from "@/components/ui/ContactUs";
+import { useRouter } from "next/navigation";
+import ContactModal from "@/components/ui/ContactModal";
 
-export default function Page() {
-  return <ContactUs onClose={() => {}} />;
+export default function ContactPage() {
+  const router = useRouter();
+
+  return <ContactModal onClose={() => router.push("/")} />;
 }

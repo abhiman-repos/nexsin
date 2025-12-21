@@ -28,9 +28,11 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Nexcyn" />
       </head>
-      <body className={inter.className}>{children}
-         <ChatAgent />
+      <body>
+        {children}
+        <ChatAgent />
       </body>
+
     </html>
   )
 }
