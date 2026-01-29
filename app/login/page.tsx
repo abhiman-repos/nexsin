@@ -19,8 +19,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, EyeOff, Wrench, Mail, Lock } from "lucide-react";
 import { GoogleIcon } from "./CustomIcons";
 import MuiButton from "@mui/material/Button";
-import { signIn } from "next-auth/react";
-
+import { signInWithGoogle } from "@/lib/auth";
+import { fetchMe } from "@/lib/backend";
+import { useEffect } from "react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -30,29 +31,22 @@ export default function LoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [user, setUser] = useState<any>(null);
 
+  useEffect(() => {
+    fetchMe()
+      .then((data) => {
+        setUser(data);
+        router.push("/home");
+      })
+      .catch(() => {
+        // user not logged in yet → stay on login page
+      });
+  }, [router]);
 
   const goToHomePage = () => {
-    router.push("/home"); 
+    router.push("/home");
   };
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setError(null);
-    setSuccess(null);
-
-    if (!email || !password) {
-      setError("Please enter your email and password.");
-      return;
-    }
-    setIsSubmitting(true);
-    // Simulate login request
-    await new Promise((r) => setTimeout(r, 800));
-    setIsSubmitting(false);
-    setSuccess("Signed in successfully! Redirecting...");
-    // Redirect after a short delay
-    setTimeout(() => router.push("/"), 900);
-  }
 
   return (
     <main className="min-h-screen bg-[#0D1117]">
@@ -97,22 +91,17 @@ export default function LoginPage() {
           </div>
 
           {/* Right: Login Card */}
-        <Card className="bg-[#FFFFFF]/5 border-0 shadow-xl max-w-md w-full mx-auto">
-            <CardHeader className="space-y-1 p-4 sm:p-6"> 
-              
+          <Card className="bg-[#FFFFFF]/5 border-0 shadow-xl max-w-md w-full mx-auto">
+            <CardHeader className="space-y-1 p-4 sm:p-6">
               <CardTitle className="text-xl sm:text-2xl text-white text-center lg:text-left">
-                Sign in to your account  
+                Sign in to your account
               </CardTitle>
               <CardDescription className="text-white text-center lg:text-left text-sm sm:text-base">
                 Enter your credentials to continue
               </CardDescription>
             </CardHeader>
             <CardContent className="p-4 sm:p-6">
-              <form
-                className="space-y-4 sm:space-y-6"
-                onSubmit={handleSubmit}
-                noValidate
-              >
+              <form className="space-y-4 sm:space-y-6" noValidate>
                 {/* Email */}
                 <div className="space-y-2">
                   <Label
@@ -228,15 +217,17 @@ export default function LoginPage() {
                   variant="outlined"
                   startIcon={<GoogleIcon />}
                   onClick={async () => {
-                    signIn("google", { callbackUrl: "/" });
+                    try {
+                      await signInWithGoogle();
+                    } catch {
+                      setError("Google sign-in failed");
+                    }
                   }}
                   sx={{
                     color: "#cfd4dcff",
                     fontWeight: "bold",
                     borderColor: "#3607efff",
                     backgroundColor: "#007bffda",
-                    text:"white",
-
                     "&:hover": {
                       borderColor: "#1035f0ff",
                       backgroundColor: "#351ee3b3",
@@ -248,7 +239,10 @@ export default function LoginPage() {
                 <div className="text-xs sm:text-sm text-[#cbd5e1]"> </div>
                 <div className="text-xs sm:text-sm text-[#cbd5e1]">
                   Don{"'"}t have an account?{" "}
-                  <Link href="/createAccount" className="text-[#007BFF] hover:underline">
+                  <Link
+                    href="/createAccount"
+                    className="text-[#007BFF] hover:underline"
+                  >
                     Create account
                   </Link>
                 </div>
